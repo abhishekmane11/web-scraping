@@ -30,7 +30,8 @@ def search():
     )
     html_source = driver.page_source
     soup_amazon = BeautifulSoup(html_source, "html.parser")
-    amazon_product_name = soup_amazon.find_all(class_="a-size-base-plus a-color-base a-text-normal")
+    amazon_product_name = [name.text for name in soup_amazon.find_all(class_="a-size-base-plus a-color-base a-text-normal")]
+
     amazon_product_price = soup_amazon.find_all(class_="a-price-whole")
     all_amazon_prices = [price.getText() for price in amazon_product_price]
     driver.quit()
@@ -49,9 +50,11 @@ def search():
     html_source = driver.page_source
     soup_flipkart = BeautifulSoup(html_source, "html.parser")
     if soup_flipkart.find_all(class_="s1Q9rs")==[]:
-        flipkart_product_name = soup_flipkart.find_all(class_="IRpwTa")
+        flipkart_product_name = [name.text for name in soup_flipkart.find_all(class_="IRpwTa")]
+
     else:
-        flipkart_product_name = soup_flipkart.find_all(class_="s1Q9rs")
+        flipkart_product_name = [name.text for name in soup_flipkart.find_all(class_="IRpwTa")]
+
     flipkart_product_price = soup_flipkart.find_all(class_="_30jeq3")
     all_flipkart_prices = [price.getText().replace('₹', '') for price in flipkart_product_price]
     driver.quit()
@@ -69,7 +72,8 @@ def search():
     )
     html_source = driver.page_source
     soup_snapdeal = BeautifulSoup(html_source, "html.parser")
-    snapdeal_product_name = soup_snapdeal.find_all(class_="product-title")
+    snapdeal_product_name = [name.text for name in soup_snapdeal.find_all(class_="product-title")]
+
     snapdeal_product_price = soup_snapdeal.find_all(class_="lfloat product-price")
     all_snapdeal_prices = [price.getText().replace('Rs.  ', '') for price in snapdeal_product_price]
     driver.quit()
@@ -103,8 +107,36 @@ def search():
     plt.tight_layout()
 
     plt.savefig('static/price_comparison.png')
+    # ...
 
-    return render_template('result.html', value=value, amazon_prices=all_amazon_prices, flipkart_prices=all_flipkart_prices, snapdeal_prices=all_snapdeal_prices)
+# Prepare product data for result.html
+    # ...
+
+# Prepare product data for result.html
+    amazon_data = list(zip(amazon_product_name, all_amazon_prices))
+    flipkart_data = list(zip(flipkart_product_name, all_flipkart_prices))
+    snapdeal_data = list(zip(snapdeal_product_name, all_snapdeal_prices))
+
+# Combine data into a single list
+    combined_data = list(zip(amazon_data, flipkart_data, snapdeal_data))
+
+# ...
+
+    return render_template('result.html', value=value, combined_data=combined_data)
+
+    # ...
+
+# Prepare product data for result.html
+    
+
+# ...
+
+    # return render_template('result.html', value=value, amazon_products=amazon_products, flipkart_products=flipkart_products, snapdeal_products=snapdeal_products)
+
+
+# ...
+
+    
 
 if __name__ == '__main__':
     app.run(debug=True)

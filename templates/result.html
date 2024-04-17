@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ... (your CSS and meta tags) ... -->
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
 
 <h2>Search Results for "{{ value }}"</h2>
 
-<!-- Display Amazon Prices -->
-<h3>Amazon Prices</h3>
-<ul>
-    {% for price in amazon_prices %}
-    <li>{{ price }}</li>
-    {% endfor %}
-</ul>
+<!-- Single Table -->
+<table>
+    <thead>
+        <tr>
+            <th>Amazon</th>
+            <th>Flipkart</th>
+            <th>Snapdeal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for amazon, flipkart, snapdeal in combined_data %}
+        <tr>
+            <td>{{ amazon[0] }} - ₹{{ amazon[1] }}</td>
+            <td>{{ flipkart[0] }} - ₹{{ flipkart[1] }}</td>
+            <td>{{ snapdeal[0] }} - ₹{{ snapdeal[1] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-<!-- Display Flipkart Prices -->
-<h3>Flipkart Prices</h3>
-<ul>
-    {% for price in flipkart_prices %}
-    <li>{{ price }}</li>
-    {% endfor %}
-</ul>
-
-<!-- Display Snapdeal Prices -->
-<h3>Snapdeal Prices</h3>
-<ul>
-    {% for price in snapdeal_prices %}
-    <li>{{ price }}</li>
-    {% endfor %}
-</ul>
+<!-- Plot -->
+<h2>Price Comparison Plot</h2>
+<img src="{{ url_for('static', filename='price_comparison.png') }}" alt="Price Comparison Plot">
 
 </body>
 </html>
